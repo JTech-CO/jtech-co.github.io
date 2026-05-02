@@ -1,2 +1,2 @@
-# JTech_CO.github.io
+# jtech_co.github.io
 Main page
