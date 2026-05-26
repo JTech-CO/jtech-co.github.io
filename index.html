@@ -7,7 +7,7 @@
     <!-- Google Fonts: Inter & JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -282,6 +282,22 @@
             text-align: right;
         }
 
+        /* --- Dynamic Grid Highlight --- */
+        .grid-highlight {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(180, 180, 180, 0.55) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(180, 180, 180, 0.55) 1px, transparent 1px);
+            background-size: 40px 40px;
+            -webkit-mask-image: radial-gradient(circle 100px at -500px -500px, black 0%, transparent 100%);
+            mask-image: radial-gradient(circle 100px at -500px -500px, black 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
         /* --- Footer --- */
         .footer {
             margin-top: 60px;
@@ -335,6 +351,7 @@
 <body>
 
     <div class="system-status">SYS.ONLINE // JTECH.CO</div>
+    <div class="grid-highlight" id="gridHighlight"></div>
 
     <!-- Header -->
     <header class="header">
@@ -376,13 +393,13 @@
             <span class="card-label">YouTube</span>
         </a>
 
-        <!-- Smart Store -->
-        <a href="https://smartstore.naver.com/jtech_co" target="_blank" class="card">
+        <!-- Extensions -->
+        <a href="#" target="_blank" class="card">
             <div class="card-header">
-                <i class="fa-solid fa-store card-icon"></i>
+                <i class="fa-solid fa-puzzle-piece card-icon"></i>
                 <span class="card-arrow">→</span>
             </div>
-            <span class="card-label">Store</span>
+            <span class="card-label">Extensions</span>
         </a>
 
     </main>
@@ -411,7 +428,19 @@
     </footer>
 
     <script>
-        /* --- Popup Logic --- */
+        /* --- Dynamic Grid Highlight --- */
+        const gridHighlight = document.getElementById('gridHighlight');
+
+        document.addEventListener('mousemove', (e) => {
+            const grad = `radial-gradient(circle 100px at ${e.clientX}px ${e.clientY}px, black 0%, transparent 100%)`;
+            gridHighlight.style.maskImage = grad;
+            gridHighlight.style.webkitMaskImage = grad;
+            gridHighlight.style.opacity = '1';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            gridHighlight.style.opacity = '0';
+        });
         const brandBtn = document.getElementById('brandBtn');
         const popupOverlay = document.getElementById('popupOverlay');
         const closeBtn = document.getElementById('closeBtn');
