@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <!-- Naver Search Advisor verifies at host root; covers all project pages under jtech-co.github.io (incl. /Neat-Cable/) -->
     <meta name="naver-site-verification" content="3bd71cedd05ff4b45229a8ba276561f05afda33b" />
     <title>JTech - System Interface</title>
@@ -33,17 +33,34 @@
             padding: 0;
         }
 
+        html {
+            width: 100%;
+            min-height: 100%;
+            background-color: var(--spx-bg-main);
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             background-color: var(--spx-bg-main);
             color: var(--spx-text-main);
             font-family: var(--font-sans);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
+            width: 100%;
             min-height: 100vh;
+            min-height: 100svh;
+            padding: 88px 24px 40px;
+            padding: calc(88px + env(safe-area-inset-top))
+                     calc(24px + env(safe-area-inset-right))
+                     calc(40px + env(safe-area-inset-bottom))
+                     calc(24px + env(safe-area-inset-left));
             overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+            overscroll-behavior-x: none;
             
             /* SpaceX Style Grid Background */
             background-image: 
@@ -52,32 +69,44 @@
             background-size: 40px 40px;
         }
 
+        body.modal-open {
+            overflow: hidden;
+        }
+
         /* Decorative Top Bar */
         .system-status {
             position: absolute;
             top: 20px;
             left: 20px;
+            top: calc(20px + env(safe-area-inset-top));
+            left: calc(20px + env(safe-area-inset-left));
+            max-width: calc(100% - 40px);
             font-family: var(--font-mono);
             font-size: 0.7rem;
             color: var(--spx-accent);
             opacity: 0.7;
+            white-space: nowrap;
         }
 
         /* --- Header & Title --- */
         .header {
             text-align: center;
+            margin-top: auto;
             margin-bottom: 60px;
             width: 100%;
             max-width: 600px;
             padding: 0 20px;
             position: relative;
             z-index: 2;
+            flex: 0 0 auto;
         }
 
         /* Technical Button Style */
         .brand-btn {
             display: inline-flex;
             align-items: center;
+            justify-content: center;
+            min-height: 44px;
             padding: 10px 20px;
             background: transparent;
             border: 1px solid var(--spx-accent);
@@ -90,83 +119,87 @@
             transition: all var(--transition-speed) ease;
             margin-bottom: 30px;
             letter-spacing: 0.05em;
-        }
-
-        .brand-btn:hover {
-            background: var(--spx-accent);
-            color: var(--spx-bg-main);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .main-title {
             font-family: var(--font-sans);
-            font-size: 3.5rem;
+            font-size: clamp(2.75rem, 7vw, 3.5rem);
             font-weight: 800;
             letter-spacing: -0.03em;
             color: #fff;
             margin: 0;
             line-height: 1;
             text-transform: uppercase;
+            overflow-wrap: anywhere;
         }
 
         .sub-title {
             font-family: var(--font-mono);
-            font-size: 0.9rem;
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
             color: var(--spx-text-muted);
             margin-top: 15px;
             letter-spacing: 0.1em;
+            line-height: 1.5;
             text-transform: uppercase;
             border-top: 1px solid var(--spx-border);
             padding-top: 15px;
             display: inline-block;
             width: 100%;
+            overflow-wrap: anywhere;
         }
 
         /* --- Grid Container --- */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 1px;
             width: 100%;
             max-width: 600px;
             background-color: var(--spx-border);
             border: 1px solid var(--spx-border);
             padding: 1px;
+            flex: 0 0 auto;
         }
 
         /* --- Card (Module) --- */
         .card {
             position: relative;
             background: var(--spx-bg-card);
+            min-width: 0;
             height: 180px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: flex-start;
+            gap: 16px;
             text-decoration: none;
             padding: 24px;
             transition: all var(--transition-speed) ease;
             cursor: pointer;
-        }
-
-        .card:hover {
-            background: var(--spx-accent);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         /* Card Content */
         .card-header {
             width: 100%;
+            min-width: 0;
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
         }
 
         .card-icon {
+            flex: 0 0 auto;
             font-size: 2rem;
             color: var(--spx-text-main);
             transition: color var(--transition-speed) ease;
         }
 
         .card-arrow {
+            flex: 0 0 auto;
             font-family: var(--font-mono);
             font-size: 1.2rem;
             color: var(--spx-border);
@@ -176,53 +209,104 @@
         }
 
         .card-label {
+            min-width: 0;
+            max-width: 100%;
             font-family: var(--font-mono);
             font-size: 1rem;
             font-weight: 700;
             color: var(--spx-accent);
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
             transition: color var(--transition-speed) ease;
         }
 
         /* Hover Effects */
-        .card:hover .card-icon { color: var(--spx-bg-main); }
-        .card:hover .card-label { color: var(--spx-bg-main); }
-        .card:hover .card-arrow { 
-            opacity: 1; 
-            transform: translateX(0); 
+        @media (hover: hover) and (pointer: fine) {
+            .brand-btn:hover {
+                background: var(--spx-accent);
+                color: var(--spx-bg-main);
+            }
+
+            .card:hover {
+                background: var(--spx-accent);
+            }
+
+            .card:hover .card-icon { color: var(--spx-bg-main); }
+            .card:hover .card-label { color: var(--spx-bg-main); }
+            .card:hover .card-arrow { 
+                opacity: 1; 
+                transform: translateX(0); 
+                color: var(--spx-bg-main);
+            }
+
+            .close-btn:hover { color: var(--spx-accent); }
+        }
+
+        .brand-btn:focus-visible,
+        .card:focus-visible,
+        .close-btn:focus-visible {
+            outline: 2px solid var(--spx-accent);
+            outline-offset: 4px;
+        }
+
+        .brand-btn:active,
+        .card:active {
+            background: var(--spx-accent);
+            color: var(--spx-bg-main);
+        }
+
+        .card:active .card-icon,
+        .card:active .card-label {
             color: var(--spx-bg-main);
         }
 
         /* --- Popup Modal --- */
         .popup-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            inset: 0;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            padding: 16px;
+            padding-top: max(16px, env(safe-area-inset-top));
+            padding-right: max(16px, env(safe-area-inset-right));
+            padding-bottom: max(16px, env(safe-area-inset-bottom));
+            padding-left: max(16px, env(safe-area-inset-left));
             background: rgba(0, 0, 0, 0.85);
+            -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px); /* Minimal blur */
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            overflow-y: auto;
+            overscroll-behavior: contain;
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
             transition: all 0.3s ease;
         }
 
         .popup-overlay.show {
             opacity: 1;
             visibility: visible;
+            pointer-events: auto;
         }
 
         .popup-content {
             background: var(--spx-bg-main);
             border: 1px solid var(--spx-accent);
-            width: 90%;
-            max-width: 600px;
+            width: min(100%, 600px);
+            max-height: 100%;
             padding: 0;
             box-shadow: 0 0 30px rgba(183, 240, 177, 0.1);
             transform: translateY(20px);
             transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
         }
 
         .popup-overlay.show .popup-content {
@@ -235,31 +319,43 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 16px;
             border-bottom: 1px solid var(--spx-accent);
+            flex: 0 0 auto;
         }
 
         .popup-title {
+            min-width: 0;
             font-family: var(--font-mono);
             font-size: 1rem;
             font-weight: 700;
             color: var(--spx-accent);
             text-transform: uppercase;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
         }
 
         .close-btn {
             background: none;
             border: none;
+            min-width: 44px;
+            min-height: 44px;
+            margin: -8px -12px -8px 0;
             color: var(--spx-text-muted);
             font-family: var(--font-mono);
             font-size: 1.2rem;
             cursor: pointer;
             transition: color 0.2s;
+            flex: 0 0 auto;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        .close-btn:hover { color: var(--spx-accent); }
 
         .popup-body {
             padding: 30px 24px;
+            min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .popup-body p {
@@ -268,6 +364,12 @@
             line-height: 1.8;
             color: var(--spx-text-main);
             margin-bottom: 20px;
+            overflow-wrap: anywhere;
+            word-break: keep-all;
+        }
+
+        .popup-body p:last-child {
+            margin-bottom: 0;
         }
         
         .popup-body p strong {
@@ -282,6 +384,7 @@
             font-size: 0.7rem;
             color: var(--spx-text-muted);
             text-align: right;
+            flex: 0 0 auto;
         }
 
         /* --- Dynamic Grid Highlight --- */
@@ -302,51 +405,251 @@
 
         /* --- Footer --- */
         .footer {
+            width: 100%;
             margin-top: 60px;
+            margin-bottom: auto;
             color: var(--spx-text-muted);
             font-family: var(--font-mono);
             font-size: 0.75rem;
+            line-height: 1.6;
+            text-align: center;
             text-transform: uppercase;
             letter-spacing: 0.1em;
+            overflow-wrap: anywhere;
+            flex: 0 0 auto;
         }
 
-        /* --- Responsive --- */
+        /* --- Responsive: Tablet / Short Viewport --- */
+        @media (max-width: 900px) {
+            body {
+                padding-right: 20px;
+                padding-left: 20px;
+                padding-right: calc(20px + env(safe-area-inset-right));
+                padding-left: calc(20px + env(safe-area-inset-left));
+            }
+
+            .header {
+                margin-bottom: 48px;
+            }
+
+            .card {
+                height: 160px;
+            }
+
+            .footer {
+                margin-top: 48px;
+            }
+        }
+
+        @media (max-height: 680px) and (min-width: 601px) {
+            body {
+                padding-top: 68px;
+                padding-bottom: 28px;
+                padding-top: calc(68px + env(safe-area-inset-top));
+                padding-bottom: calc(28px + env(safe-area-inset-bottom));
+            }
+
+            .header {
+                margin-bottom: 28px;
+            }
+
+            .brand-btn {
+                margin-bottom: 18px;
+            }
+
+            .main-title {
+                font-size: 2.75rem;
+            }
+
+            .sub-title {
+                margin-top: 12px;
+                padding-top: 12px;
+            }
+
+            .card {
+                height: 132px;
+                padding: 20px;
+            }
+
+            .footer {
+                margin-top: 28px;
+            }
+        }
+
+        /* --- Responsive: Mobile --- */
         @media (max-width: 600px) {
+            body {
+                padding: 72px 16px 28px;
+                padding: calc(72px + env(safe-area-inset-top))
+                         calc(16px + env(safe-area-inset-right))
+                         calc(28px + env(safe-area-inset-bottom))
+                         calc(16px + env(safe-area-inset-left));
+            }
+
+            .system-status {
+                top: 16px;
+                left: 16px;
+                top: calc(16px + env(safe-area-inset-top));
+                left: calc(16px + env(safe-area-inset-left));
+                max-width: calc(100% - 32px);
+                font-size: 0.65rem;
+            }
+
+            .header {
+                margin-bottom: 32px;
+                padding: 0;
+            }
+
+            .brand-btn {
+                max-width: 100%;
+                margin-bottom: 24px;
+                white-space: normal;
+            }
+
+            .main-title {
+                font-size: clamp(2.35rem, 14vw, 3rem);
+            }
+
+            .sub-title {
+                font-size: clamp(0.68rem, 3.2vw, 0.82rem);
+                letter-spacing: 0.07em;
+            }
+
             .grid-container {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr);
                 background: transparent;
                 border: none;
-                gap: 15px;
+                padding: 0;
+                gap: 12px;
             }
             
             .card {
-                height: 120px;
+                width: 100%;
+                height: auto;
+                min-height: 100px;
                 flex-direction: row;
+                justify-content: flex-start;
                 align-items: center;
+                gap: 16px;
                 border: 1px solid var(--spx-border);
+                padding: 20px;
             }
             
             .card-header {
                 width: auto;
+                flex: 0 0 auto;
                 order: 1;
             }
             
             .card-icon {
                 font-size: 1.5rem;
-                margin-right: 15px;
+                margin-right: 0;
             }
             
             .card-label {
                 order: 2;
-                flex: 1;
-                font-size: 1.1rem;
+                flex: 1 1 auto;
+                font-size: 1rem;
             }
             
             .card-arrow {
                 display: none;
             }
 
-            .main-title { font-size: 2.5rem; }
+            .popup-header {
+                padding: 13px 18px;
+            }
+
+            .popup-title {
+                font-size: 0.88rem;
+            }
+
+            .popup-body {
+                padding: 24px 18px;
+            }
+
+            .popup-body p {
+                font-size: 0.9rem;
+                line-height: 1.75;
+            }
+
+            .popup-footer {
+                padding: 10px 18px;
+            }
+
+            .footer {
+                margin-top: 36px;
+                font-size: 0.65rem;
+                letter-spacing: 0.07em;
+            }
+        }
+
+        @media (max-width: 380px) {
+            body {
+                padding-right: 12px;
+                padding-left: 12px;
+                padding-right: calc(12px + env(safe-area-inset-right));
+                padding-left: calc(12px + env(safe-area-inset-left));
+            }
+
+            .system-status {
+                left: 12px;
+                left: calc(12px + env(safe-area-inset-left));
+                max-width: calc(100% - 24px);
+                font-size: 0.6rem;
+            }
+
+            .brand-btn {
+                padding: 9px 14px;
+                font-size: 0.72rem;
+            }
+
+            .card {
+                min-height: 92px;
+                padding: 16px;
+            }
+
+            .card-label {
+                font-size: 0.92rem;
+            }
+
+            .popup-overlay {
+                padding: 10px;
+                padding-top: max(10px, env(safe-area-inset-top));
+                padding-right: max(10px, env(safe-area-inset-right));
+                padding-bottom: max(10px, env(safe-area-inset-bottom));
+                padding-left: max(10px, env(safe-area-inset-left));
+            }
+
+            .popup-header {
+                padding-right: 14px;
+                padding-left: 14px;
+            }
+
+            .popup-body {
+                padding-right: 14px;
+                padding-left: 14px;
+            }
+        }
+
+        @media (max-height: 560px) {
+            .popup-overlay {
+                align-items: flex-start;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+                transition-delay: 0ms !important;
+            }
+
+            .grid-highlight {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -357,7 +660,7 @@
 
     <!-- Header -->
     <header class="header">
-        <button class="brand-btn" id="brandBtn">
+        <button class="brand-btn" id="brandBtn" type="button" aria-controls="popupOverlay" aria-expanded="false">
             [ Identify Protocol ]
         </button>
         <h1 class="main-title">JTech</h1>
@@ -369,7 +672,7 @@
     <main class="grid-container">
         
         <!-- GitHub -->
-        <a href="https://github.com/JTech-CO" target="_blank" class="card">
+        <a href="https://github.com/JTech-CO" target="_blank" rel="noopener noreferrer" class="card">
             <div class="card-header">
                 <i class="fab fa-github card-icon"></i>
                 <span class="card-arrow">→</span>
@@ -378,7 +681,7 @@
         </a>
 
         <!-- Kmong -->
-        <a href="https://kmong.com/@JTech" target="_blank" class="card">
+        <a href="https://kmong.com/@JTech" target="_blank" rel="noopener noreferrer" class="card">
             <div class="card-header">
                 <i class="fa-solid fa-k card-icon"></i>
                 <span class="card-arrow">→</span>
@@ -387,7 +690,7 @@
         </a>
 
         <!-- YouTube -->
-        <a href="https://www.youtube.com/@JTech_Corp" target="_blank" class="card">
+        <a href="https://www.youtube.com/@JTech_Corp" target="_blank" rel="noopener noreferrer" class="card">
             <div class="card-header">
                 <i class="fab fa-youtube card-icon"></i>
                 <span class="card-arrow">→</span>
@@ -395,23 +698,23 @@
             <span class="card-label">YouTube</span>
         </a>
 
-        <!-- Extensions -->
-        <a href="#" target="_blank" class="card">
+        <!-- Portfolio -->
+        <a href="#" target="_blank" rel="noopener noreferrer" class="card">
             <div class="card-header">
                 <i class="fa-solid fa-puzzle-piece card-icon"></i>
                 <span class="card-arrow">→</span>
             </div>
-            <span class="card-label">Extensions</span>
+            <span class="card-label">Portfolio</span>
         </a>
 
     </main>
 
     <!-- Popup Modal -->
-    <div class="popup-overlay" id="popupOverlay">
-        <div class="popup-content">
+    <div class="popup-overlay" id="popupOverlay" aria-hidden="true">
+        <div class="popup-content" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
             <div class="popup-header">
-                <span class="popup-title">Mission Briefing: JTech</span>
-                <button class="close-btn" id="closeBtn">[ X ]</button>
+                <span class="popup-title" id="popupTitle">Mission Briefing: JTech</span>
+                <button class="close-btn" id="closeBtn" type="button" aria-label="팝업 닫기">[ X ]</button>
             </div>
             <div class="popup-body">
                 <p><strong>"내가 좋아하는 일을 사업으로"</strong><br>JTech(제이택)은 이 목표로 탄생한 1인 콘텐츠 스튜디오입니다.</p>
@@ -432,31 +735,50 @@
     <script>
         /* --- Dynamic Grid Highlight --- */
         const gridHighlight = document.getElementById('gridHighlight');
+        const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-        document.addEventListener('mousemove', (e) => {
-            const grad = `radial-gradient(circle 100px at ${e.clientX}px ${e.clientY}px, black 0%, transparent 100%)`;
-            gridHighlight.style.maskImage = grad;
-            gridHighlight.style.webkitMaskImage = grad;
-            gridHighlight.style.opacity = '1';
-        });
+        if (finePointer.matches && !reduceMotion.matches) {
+            document.addEventListener('mousemove', (e) => {
+                const grad = `radial-gradient(circle 100px at ${e.clientX}px ${e.clientY}px, black 0%, transparent 100%)`;
+                gridHighlight.style.maskImage = grad;
+                gridHighlight.style.webkitMaskImage = grad;
+                gridHighlight.style.opacity = '1';
+            });
 
-        document.addEventListener('mouseleave', () => {
-            gridHighlight.style.opacity = '0';
-        });
+            document.addEventListener('mouseleave', () => {
+                gridHighlight.style.opacity = '0';
+            });
+        }
+
         const brandBtn = document.getElementById('brandBtn');
         const popupOverlay = document.getElementById('popupOverlay');
         const closeBtn = document.getElementById('closeBtn');
+        let lastFocusedElement = null;
 
         // Open Popup
         brandBtn.addEventListener('click', () => {
+            lastFocusedElement = document.activeElement;
             popupOverlay.classList.add('show');
-            document.body.style.overflow = 'hidden';
+            popupOverlay.setAttribute('aria-hidden', 'false');
+            brandBtn.setAttribute('aria-expanded', 'true');
+            document.body.classList.add('modal-open');
+
+            requestAnimationFrame(() => {
+                closeBtn.focus();
+            });
         });
 
         // Close Popup
         const closePopup = () => {
             popupOverlay.classList.remove('show');
-            document.body.style.overflow = '';
+            popupOverlay.setAttribute('aria-hidden', 'true');
+            brandBtn.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('modal-open');
+
+            if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+                lastFocusedElement.focus();
+            }
         };
 
         closeBtn.addEventListener('click', closePopup);
